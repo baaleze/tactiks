@@ -7,6 +7,7 @@ import org.hexworks.zircon.api.component.ComponentAlignment
 import org.hexworks.zircon.api.component.renderer.ComponentDecorationRenderer
 import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.grid.TileGrid
+import org.hexworks.zircon.api.uievent.Processed
 import org.hexworks.zircon.api.view.base.BaseView
 
 class MainMenuView(private val tileGrid: TileGrid): BaseView(tileGrid, GameConfig.THEME) {
@@ -28,6 +29,7 @@ class MainMenuView(private val tileGrid: TileGrid): BaseView(tileGrid, GameConfi
                 .build()
         startButton.onActivated {
             replaceWith(PlayView(tileGrid))
+            Processed
         }
 
         screen.addComponent(header)

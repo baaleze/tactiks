@@ -4,8 +4,8 @@ import fr.vahren.world.GameBlock
 
 object GameBlockFactory {
 
-    fun floor() = GameBlock(GameTilesFactory.FLOOR)
+    fun floor() = GameBlock(GameTileFactory.FLOOR)
 
-    fun wall() = GameBlock(GameTilesFactory.WALL)
+    fun wall() = GameBlock(GameTileFactory.WALL)
 
 }

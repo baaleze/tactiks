@@ -3,6 +3,7 @@ package fr.vahren.view
 import fr.vahren.world.GameBlock
 import fr.vahren.GameConfig
 import fr.vahren.world.Game
+import fr.vahren.world.GameBuilder
 import org.hexworks.zircon.api.ColorThemes
 import org.hexworks.zircon.api.ComponentDecorations
 import org.hexworks.zircon.api.Components
@@ -13,7 +14,7 @@ import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.grid.TileGrid
 import org.hexworks.zircon.api.view.base.BaseView
 
-class PlayView(private val tileGrid: TileGrid, private val game: Game = Game.create()) : BaseView(tileGrid, ColorThemes.arc()) {
+class PlayView(private val tileGrid: TileGrid, private val game: Game = GameBuilder.defaultGame()) : BaseView(tileGrid, ColorThemes.arc()) {
 
     override fun onDock() {
         val sideBar = Components.panel()

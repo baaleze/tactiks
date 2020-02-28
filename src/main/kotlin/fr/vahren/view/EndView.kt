@@ -7,6 +7,7 @@ import org.hexworks.zircon.api.component.ComponentAlignment
 import org.hexworks.zircon.api.component.renderer.ComponentDecorationRenderer
 import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.grid.TileGrid
+import org.hexworks.zircon.api.uievent.Processed
 import org.hexworks.zircon.api.view.base.BaseView
 
 class EndView(private val tileGrid: TileGrid, private val lost: Boolean) : BaseView(tileGrid, ColorThemes.arc()) {
@@ -34,6 +35,7 @@ class EndView(private val tileGrid: TileGrid, private val lost: Boolean) : BaseV
 
         restartButton.onActivated {
             replaceWith(PlayView(tileGrid))
+            Processed
         }
 
         exitButton.onActivated {

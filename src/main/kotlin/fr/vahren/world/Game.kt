@@ -1,15 +1,15 @@
 package fr.vahren.world
 
-import fr.vahren.GameConfig
-import org.hexworks.zircon.api.data.Size3D
+import fr.vahren.GameEntity
+import fr.vahren.engine.type.Player
 
-class Game(val world: World) {
+class Game(val world: World,
+           val player: GameEntity<Player>) {
 
     companion object {
 
-        fun create(worldSize: Size3D = GameConfig.WORLD_SIZE,
-                   visibleSize: Size3D = GameConfig.WORLD_VISIBLE_SIZE) = Game(WorldBuilder(worldSize)
-                .makeCaves()
-                .build(visibleSize))
+        fun create(world: World, player: GameEntity<Player>): Game {
+            return Game(world, player)
+        }
     }
 }
