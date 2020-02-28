@@ -1,25 +1,17 @@
 package fr.vahren
 
+import fr.vahren.view.MainMenuView
+import fr.vahren.view.PlayView
 import org.hexworks.zircon.api.CP437TilesetResources
 import org.hexworks.zircon.api.ColorThemes
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.application.AppConfig
 import org.hexworks.zircon.api.extensions.toScreen
+import org.hexworks.zircon.api.screen.Screen
 
 fun main(args: Array<String>) {
-    val tileGrid = SwingApplications.startTileGrid(
-            AppConfig.newBuilder()
-                    .withSize(60, 30)
-                    .withDefaultTileset(CP437TilesetResources.rexPaint16x16())
-                    .build())
+    val tileGrid = SwingApplications.startTileGrid(GameConfig.buildAppConfig())
 
-    val screen = tileGrid.toScreen()
-
-    screen.addComponent(Components.label()
-            .withText("Hello, Zircon!")
-            .withPosition(23, 10))
-
-    screen.display()
-    screen.theme = ColorThemes.arc()
+    tileGrid.dock(PlayView(tileGrid))
 }
