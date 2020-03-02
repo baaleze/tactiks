@@ -33,7 +33,7 @@ class PlayView(private val tileGrid: TileGrid, private val game: Game = GameBuil
         screen.addComponents(sideBar, log, gameComponent)
 
         // inputs
-        screen.processKeyboardEvents(KeyboardEventType.KEY_PRESSED) { event, _ ->
+        tileGrid.processKeyboardEvents(KeyboardEventType.KEY_PRESSED) { event, _ ->
             game.world.update(screen, event, game)
             Processed
         }

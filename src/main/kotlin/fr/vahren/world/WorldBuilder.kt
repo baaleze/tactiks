@@ -36,7 +36,7 @@ class WorldBuilder(private val worldSize: Size3D) { // 1
                 // count the type of all blocks around
                 pos.sameLevelNeighborsShuffled().plus(pos).forEach { neighbor -> // 8
                     blocks.whenPresent(neighbor) { block -> // 9
-                        if (block.isFloor) {
+                        if (block.isEmptyFloor) {
                             floors++
                         } else rocks++
                     }

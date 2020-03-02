@@ -5,6 +5,7 @@ import fr.vahren.engine.GameContext
 import fr.vahren.engine.command.MoveCamera
 import fr.vahren.engine.command.MoveTo
 import fr.vahren.engine.position
+import fr.vahren.engine.tryActionsOn
 import fr.vahren.engine.type.Player
 import org.hexworks.amethyst.api.CommandResponse
 import org.hexworks.amethyst.api.Consumed
@@ -19,10 +20,16 @@ object Movable : BaseFacet<GameContext>() {
         command.responseWhenCommandIs(MoveTo::class) { (context, entity, position) ->
             val world = context.world
             val previousPosition = entity.position
-            if (world.moveEntity(entity, position)) {
-                if (entity.type == Player) {
-                    CommandResponse(MoveCamera(context, entity, previousPosition))
-                } else Consumed
+            val targetBlock = world.fetchBlockAt(position)
+
+            if (targetBlock.isPresent) {
+                if (targetBlock.get().isOccupied) {
+                    entity.tryActionsOn(context, targetBlock.get().occupier.get())
+                } else if (world.moveEntity(entity, position)) {
+                    if (entity.type == Player) {
+                        CommandResponse(MoveCamera(context, entity, previousPosition))
+                    } else Consumed
+                } else Pass
             } else Pass
         }
 }

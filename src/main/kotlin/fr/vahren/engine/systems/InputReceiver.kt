@@ -16,8 +16,8 @@ object InputReceiver : BaseBehavior<GameContext>() {
         val currentPos = player.position
         if (uiEvent is KeyboardEvent) {  // 2
             val newPosition = when (uiEvent.code) { // 3
-                KeyCode.KEY_W -> currentPos.withRelativeY(-1)
-                KeyCode.KEY_A -> currentPos.withRelativeX(-1)
+                KeyCode.KEY_Z -> currentPos.withRelativeY(-1)
+                KeyCode.KEY_Q -> currentPos.withRelativeX(-1)
                 KeyCode.KEY_S -> currentPos.withRelativeY(1)
                 KeyCode.KEY_D -> currentPos.withRelativeX(1)
                 else -> {
