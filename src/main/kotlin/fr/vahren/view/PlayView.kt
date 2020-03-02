@@ -12,6 +12,8 @@ import org.hexworks.zircon.api.component.ComponentAlignment
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.grid.TileGrid
+import org.hexworks.zircon.api.uievent.KeyboardEventType
+import org.hexworks.zircon.api.uievent.Processed
 import org.hexworks.zircon.api.view.base.BaseView
 
 class PlayView(private val tileGrid: TileGrid, private val game: Game = GameBuilder.defaultGame()) : BaseView(tileGrid, ColorThemes.arc()) {
@@ -29,6 +31,13 @@ class PlayView(private val tileGrid: TileGrid, private val game: Game = GameBuil
                 .withAlignmentWithin(screen, ComponentAlignment.TOP_RIGHT)
 
         screen.addComponents(sideBar, log, gameComponent)
+
+        // inputs
+        screen.processKeyboardEvents(KeyboardEventType.KEY_PRESSED) { event, _ ->
+            game.world.update(screen, event, game)
+            Processed
+        }
+
 
     }
 }

@@ -12,7 +12,7 @@ import org.hexworks.zircon.api.data.base.BaseBlock
 class GameBlock(
         private var tile: Tile = GameTileFactory.FLOOR,
         private val currentEntities: MutableList<GameEntity<EntityType>> = mutableListOf())
-    : BaseBlock<Tile>(GameTileFactory.EMPTY, persistentMapOf(BlockTileType.TOP to tile)) {
+    : BaseBlock<Tile>(GameTileFactory.EMPTY, persistentMapOf()) {
 
     val isFloor: Boolean
         get() = tile == GameTileFactory.FLOOR
@@ -22,21 +22,19 @@ class GameBlock(
         get() = tile == GameTileFactory.WALL
 
     val isEmptyFloor: Boolean // 2
-        get() = currentEntities.isEmpty()
+        get() = currentEntities.isEmpty() && isFloor
 
     val entities: Iterable<GameEntity<EntityType>> // 3
         get() = currentEntities.toList()
 
-    override var content: Tile = tile
-        get() {
-            val entityTiles = currentEntities.map { it.tile }
-            return when {
-                entityTiles.contains(GameTileFactory.PLAYER) -> GameTileFactory.PLAYER // 5
-                entityTiles.isNotEmpty() -> entityTiles.first() // 6
-                else -> tile // 7
-            }
+    override fun getTileByType(blockTileType: BlockTileType): Tile {
+        val entityTiles = currentEntities.map { it.tile }
+        return when {
+            entityTiles.contains(GameTileFactory.PLAYER) -> GameTileFactory.PLAYER
+            entityTiles.isNotEmpty() -> entityTiles.first()
+            else -> tile
         }
-
+    }
 
     fun addEntity(entity: GameEntity<EntityType>) { // 8
         currentEntities.add(entity)

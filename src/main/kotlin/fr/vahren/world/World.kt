@@ -12,6 +12,8 @@ import org.hexworks.zircon.api.data.Position3D
 import org.hexworks.zircon.api.data.Size3D
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.game.base.BaseGameArea
+import org.hexworks.zircon.api.screen.Screen
+import org.hexworks.zircon.api.uievent.UIEvent
 
 class World(
         startingBlocks: Map<Position3D, GameBlock>,
@@ -29,6 +31,31 @@ class World(
             }
         }
     }
+
+    fun update(screen: Screen, uiEvent: UIEvent, game: Game) {
+        engine.update(GameContext(
+                world = this,
+                screen = screen,
+                uiEvent = uiEvent,
+                player = game.player))
+    }
+
+    fun moveEntity(entity: GameEntity<EntityType>, position: Position3D): Boolean {
+        val oldBlock = fetchBlockAt(entity.position)
+        val newBlock = fetchBlockAt(position)
+
+        return if (bothBlocksPresent(oldBlock, newBlock)) {
+            oldBlock.get().removeEntity(entity)
+            entity.position = position
+            newBlock.get().addEntity(entity)
+            true
+        } else false
+    }
+
+    private fun bothBlocksPresent(oldBlock: Maybe<GameBlock>, newBlock: Maybe<GameBlock>) =  // 7
+            oldBlock.isPresent && newBlock.isPresent
+
+
 
     /**
      * Adds the given [Entity] at the given [Position3D].
