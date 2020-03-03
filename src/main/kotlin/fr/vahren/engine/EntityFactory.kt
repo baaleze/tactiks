@@ -1,14 +1,10 @@
 package fr.vahren.engine
 
-import fr.vahren.engine.attribute.BlockOccupier
-import fr.vahren.engine.attribute.EntityActions
-import fr.vahren.engine.attribute.EntityPosition
-import fr.vahren.engine.attribute.EntityTile
+import fr.vahren.engine.attribute.*
+import fr.vahren.engine.command.Attack
 import fr.vahren.engine.command.Dig
-import fr.vahren.engine.systems.Diggable
-import fr.vahren.engine.systems.MovesCamera
-import fr.vahren.engine.systems.InputReceiver
-import fr.vahren.engine.systems.Movable
+import fr.vahren.engine.systems.*
+import fr.vahren.engine.type.Fungus
 import fr.vahren.engine.type.Player
 import fr.vahren.engine.type.Wall
 import fr.vahren.factory.GameTileFactory
@@ -22,7 +18,9 @@ fun <T : EntityType> newGameEntityOfType(type: T, init: EntityBuilder<T, GameCon
 object EntityFactory {
 
     fun newPlayer() = newGameEntityOfType(Player) {
-        attributes(EntityPosition(), EntityTile(GameTileFactory.PLAYER), EntityActions(Dig::class))
+        attributes(EntityPosition(),
+                EntityTile(GameTileFactory.PLAYER),
+                EntityActions(Dig::class, Attack::class))
         behaviors(InputReceiver)
         facets(Movable, MovesCamera)
     }
@@ -34,5 +32,15 @@ object EntityFactory {
                 EntityTile(GameTileFactory.WALL))
         facets(Diggable)
     }
+
+    fun newFungus(fungusSpread: FungusSpread = FungusSpread()) = newGameEntityOfType(Fungus) {
+        attributes(BlockOccupier,
+                EntityPosition(),
+                EntityTile(GameTileFactory.FUNGUS),
+                fungusSpread)
+        facets(Attackable)
+        behaviors()
+    }
+
 
 }

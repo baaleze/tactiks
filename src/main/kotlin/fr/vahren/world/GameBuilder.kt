@@ -1,11 +1,15 @@
 package fr.vahren.world
 
 import fr.vahren.GameConfig
+import fr.vahren.GameConfig.DUNGEON_LEVELS
+import fr.vahren.GameConfig.FUNGI_PER_LEVEL
 import fr.vahren.GameConfig.WORLD_SIZE
 import fr.vahren.GameEntity
 import fr.vahren.engine.EntityFactory
 import fr.vahren.engine.type.Player
+import org.hexworks.amethyst.api.entity.EntityType
 import org.hexworks.zircon.api.data.Position3D
+import org.hexworks.zircon.api.data.Size
 import org.hexworks.zircon.api.data.Size3D
 
 class GameBuilder(val worldSize: Size3D) {
@@ -24,6 +28,7 @@ class GameBuilder(val worldSize: Size3D) {
         prepareWorld()
 
         val player = addPlayer()
+        addFungi()
 
         return Game.create(
                 player = player,
@@ -35,12 +40,27 @@ class GameBuilder(val worldSize: Size3D) {
     }
 
     private fun addPlayer(): GameEntity<Player> {
-        val player = EntityFactory.newPlayer()
-        world.addAtEmptyPosition(player,
-                offset = Position3D.defaultPosition().withZ(GameConfig.DUNGEON_LEVELS - 1),
-                size = world.visibleSize.copy(zLength = 0))
-        return player
+        return EntityFactory.newPlayer().addToWorld(DUNGEON_LEVELS - 1, world.visibleSize.to2DSize())
     }
+
+    private fun addFungi() = also {
+        repeat(world.actualSize.zLength) { level ->
+            repeat(FUNGI_PER_LEVEL) {
+                EntityFactory.newFungus().addToWorld(level)
+            }
+        }
+    }
+
+
+    private fun <T : EntityType> GameEntity<T>.addToWorld(
+            atLevel: Int,
+            atArea: Size = world.actualSize.to2DSize()): GameEntity<T> {
+        world.addAtEmptyPosition(this,
+                offset = Position3D.defaultPosition().withZ(atLevel),
+                size = Size3D.from2DSize(atArea))
+        return this
+    }
+
 
     companion object {
 
