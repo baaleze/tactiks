@@ -1,16 +1,23 @@
 package fr.vahren.engine
 
 import fr.vahren.AnyGameEntity
+import fr.vahren.GameEntity
 import fr.vahren.engine.attribute.BlockOccupier
 import fr.vahren.engine.attribute.EntityActions
 import fr.vahren.engine.attribute.EntityPosition
 import fr.vahren.engine.attribute.EntityTile
+import fr.vahren.engine.type.Combatant
+import fr.vahren.engine.type.Player
+import fr.vahren.engine.type.combatStats
 import org.hexworks.amethyst.api.Attribute
 import org.hexworks.amethyst.api.Consumed
 import org.hexworks.amethyst.api.Pass
 import org.hexworks.amethyst.api.Response
 import org.hexworks.zircon.api.data.Tile
 import kotlin.reflect.KClass
+
+val AnyGameEntity.isPlayer: Boolean
+    get() = this.type == Player
 
 var AnyGameEntity.position // 1
     get() = tryToFindAttribute(EntityPosition::class).position // 2
@@ -42,4 +49,11 @@ fun AnyGameEntity.tryActionsOn(context: GameContext, target: AnyGameEntity): Res
     }
     return result
 }
+
+fun GameEntity<Combatant>.whenHasNoHealthLeft(callback: () -> Unit) {
+    if (combatStats.hp <= 0) {
+        callback()
+    }
+}
+
 

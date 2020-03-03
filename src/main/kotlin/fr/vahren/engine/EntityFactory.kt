@@ -20,7 +20,11 @@ object EntityFactory {
     fun newPlayer() = newGameEntityOfType(Player) {
         attributes(EntityPosition(),
                 EntityTile(GameTileFactory.PLAYER),
-                EntityActions(Dig::class, Attack::class))
+                EntityActions(Dig::class, Attack::class),
+                CombatStats.create(
+                        maxHp = 100,
+                        attackValue = 10,
+                        defenseValue = 5))
         behaviors(InputReceiver)
         facets(Movable, MovesCamera)
     }
@@ -37,8 +41,12 @@ object EntityFactory {
         attributes(BlockOccupier,
                 EntityPosition(),
                 EntityTile(GameTileFactory.FUNGUS),
-                fungusSpread)
-        facets(Attackable)
+                fungusSpread,
+                CombatStats.create(
+                        maxHp = 10,
+                        attackValue = 0,
+                        defenseValue = 0))
+        facets(Attackable, Destroyable)
         behaviors()
     }
 
