@@ -10,7 +10,7 @@ import org.hexworks.amethyst.api.entity.EntityType
 
 object MovesCamera : BaseFacet<GameContext>() {
 
-    override fun executeCommand(command: GameCommand<out EntityType>) =
+    override suspend fun executeCommand(command: GameCommand<out EntityType>) =
             command.responseWhenCommandIs(MoveCamera::class) { cmd ->
                 val (context, source, previousPosition) = cmd
                 val world = context.world

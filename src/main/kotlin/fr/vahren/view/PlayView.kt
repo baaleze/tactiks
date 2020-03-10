@@ -5,7 +5,8 @@ import fr.vahren.GameConfig
 import fr.vahren.event.GameLogEvent
 import fr.vahren.world.Game
 import fr.vahren.world.GameBuilder
-import org.hexworks.cobalt.events.api.subscribe
+import org.hexworks.cobalt.events.api.KeepSubscription
+import org.hexworks.cobalt.events.api.subscribeTo
 import org.hexworks.zircon.api.ColorThemes
 import org.hexworks.zircon.api.ComponentDecorations
 import org.hexworks.zircon.api.Components
@@ -45,11 +46,12 @@ class PlayView(private val tileGrid: TileGrid, private val game: Game = GameBuil
         }
 
         // log
-        Zircon.eventBus.subscribe<GameLogEvent> { (text) ->
+        Zircon.eventBus.subscribeTo<GameLogEvent> {
             log.addParagraph(
-                    paragraph = text,
+                    paragraph = it.text,
                     withNewLine = false,
                     withTypingEffectSpeedInMs = 10)
+            KeepSubscription
         }
 
     }

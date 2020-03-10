@@ -8,6 +8,8 @@ import fr.vahren.engine.isPlayer
 import fr.vahren.engine.type.combatStats
 import fr.vahren.engine.whenHasNoHealthLeft
 import fr.vahren.logGameEvent
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.hexworks.amethyst.api.Consumed
 import org.hexworks.amethyst.api.Pass
 import org.hexworks.amethyst.api.base.BaseFacet
@@ -15,7 +17,7 @@ import org.hexworks.amethyst.api.entity.EntityType
 
 object Attackable : BaseFacet<GameContext>() {
 
-    override fun executeCommand(command: GameCommand<out EntityType>) = command.responseWhenCommandIs(Attack::class) { (context, attacker, target) ->
+    override suspend fun executeCommand(command: GameCommand<out EntityType>) = command.responseWhenCommandIs(Attack::class) { (context, attacker, target) ->
         if (attacker.isPlayer || target.isPlayer) { // 1
             val finalDamage = (0..(attacker.combatStats.attackValue - target.combatStats.defenseValue)).random() + 1
 
@@ -23,11 +25,13 @@ object Attackable : BaseFacet<GameContext>() {
             logGameEvent("The $attacker hits the $target for $finalDamage!", context)
 
             target.whenHasNoHealthLeft {
-                target.executeCommand(Destroy(
-                        context = context,
-                        source = attacker,
-                        target = target,
-                        cause = "a blow to the head"))
+                GlobalScope.launch {
+                    target.executeCommand(Destroy(
+                            context = context,
+                            source = attacker,
+                            target = target,
+                            cause = "a blow to the head"))
+                }
             }
             Consumed
         } else Pass

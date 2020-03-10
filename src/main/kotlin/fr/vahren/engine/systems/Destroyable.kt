@@ -10,7 +10,7 @@ import org.hexworks.amethyst.api.entity.EntityType
 
 object Destroyable : BaseFacet<GameContext>() {
 
-    override fun executeCommand(command: GameCommand<out EntityType>) = command.responseWhenCommandIs(Destroy::class) { (context, attacker, target, cause) ->
+    override suspend fun executeCommand(command: GameCommand<out EntityType>) = command.responseWhenCommandIs(Destroy::class) { (context, attacker, target, cause) ->
         context.world.removeEntity(target)
         logGameEvent("$target dies from $cause.", context)
         Consumed

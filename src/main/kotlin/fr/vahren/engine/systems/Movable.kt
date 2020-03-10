@@ -16,7 +16,7 @@ import org.hexworks.amethyst.api.entity.EntityType
 
 object Movable : BaseFacet<GameContext>() {
 
-    override fun executeCommand(command: GameCommand<out EntityType>) =
+    override suspend fun executeCommand(command: GameCommand<out EntityType>) =
         command.responseWhenCommandIs(MoveTo::class) { (context, entity, position) ->
             val world = context.world
             val previousPosition = entity.position

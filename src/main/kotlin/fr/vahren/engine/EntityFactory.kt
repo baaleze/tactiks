@@ -8,37 +8,33 @@ import fr.vahren.engine.type.Fungus
 import fr.vahren.engine.type.Player
 import fr.vahren.engine.type.Wall
 import fr.vahren.factory.GameTileFactory
-import org.hexworks.amethyst.api.Entities
 import org.hexworks.amethyst.api.builder.EntityBuilder
-import org.hexworks.amethyst.api.entity.EntityType
 
-fun <T : EntityType> newGameEntityOfType(type: T, init: EntityBuilder<T, GameContext>.() -> Unit) =
-        Entities.newEntityOfType(type, init)
 
 object EntityFactory {
 
-    fun newPlayer() = newGameEntityOfType(Player) {
-        attributes(EntityPosition(),
+    fun newPlayer() = EntityBuilder<Player, GameContext>(Player)
+            .attributes(EntityPosition(),
                 EntityTile(GameTileFactory.PLAYER),
                 EntityActions(Dig::class, Attack::class),
                 CombatStats.create(
                         maxHp = 100,
                         attackValue = 10,
                         defenseValue = 5))
-        behaviors(InputReceiver)
-        facets(Movable, MovesCamera)
-    }
+            .behaviors(InputReceiver)
+            .facets(Movable, MovesCamera)
+            .build()
 
-    fun newWall() = newGameEntityOfType(Wall) {
-        attributes(
+    fun newWall() = EntityBuilder<Wall, GameContext>(Wall)
+            .attributes(
                 EntityPosition(),
                 BlockOccupier,
                 EntityTile(GameTileFactory.WALL))
-        facets(Diggable)
-    }
+            .facets(Diggable)
+            .build()
 
-    fun newFungus(fungusSpread: FungusSpread = FungusSpread()) = newGameEntityOfType(Fungus) {
-        attributes(BlockOccupier,
+    fun newFungus(fungusSpread: FungusSpread = FungusSpread()) = EntityBuilder<Fungus, GameContext>(Fungus)
+            .attributes(BlockOccupier,
                 EntityPosition(),
                 EntityTile(GameTileFactory.FUNGUS),
                 fungusSpread,
@@ -46,9 +42,9 @@ object EntityFactory {
                         maxHp = 10,
                         attackValue = 0,
                         defenseValue = 0))
-        facets(Attackable, Destroyable)
-        behaviors()
-    }
+            .facets(Attackable, Destroyable)
+            .behaviors()
+            .build()
 
 
 }

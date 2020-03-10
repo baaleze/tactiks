@@ -53,7 +53,6 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'ch.qos.logback:logback-core:1.2.3'
 
-    implementation "org.hexworks.cobalt:cobalt.databinding-jvm:$cobalt_version"
     implementation "org.hexworks.amethyst:amethyst.core-jvm:$amethyst_version"
     implementation "org.hexworks.zircon:zircon.core-jvm:$zircon_version"
     implementation "org.hexworks.zircon:zircon.jvm.swing:$zircon_version"

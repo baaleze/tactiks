@@ -12,7 +12,7 @@ import org.hexworks.zircon.api.data.Size3D
 
 object GrowsFungus : BaseBehavior<GameContext>(FungusSpread::class) {
 
-    override fun update(entity: GameEntity<out EntityType>, context: GameContext): Boolean {
+    override suspend fun update(entity: GameEntity<out EntityType>, context: GameContext): Boolean {
         val world = context.world
         val fungusSpread = entity.tryToFindAttribute(FungusSpread::class)
         val (spreadCount, maxSpread) = fungusSpread

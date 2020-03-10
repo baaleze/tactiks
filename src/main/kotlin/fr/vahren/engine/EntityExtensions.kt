@@ -9,6 +9,7 @@ import fr.vahren.engine.attribute.EntityTile
 import fr.vahren.engine.type.Combatant
 import fr.vahren.engine.type.Player
 import fr.vahren.engine.type.combatStats
+import kotlinx.coroutines.runBlocking
 import org.hexworks.amethyst.api.Attribute
 import org.hexworks.amethyst.api.Consumed
 import org.hexworks.amethyst.api.Pass
@@ -41,8 +42,12 @@ fun AnyGameEntity.tryActionsOn(context: GameContext, target: AnyGameEntity): Res
     var result: Response = Pass
     findAttribute(EntityActions::class).map {
         it.createActionsFor(context, this, target).forEach { action ->
-            if (target.executeCommand(action) is Consumed) {
-                result = Consumed
+            runBlocking {
+                if (target.executeCommand(action) is Consumed) {
+                    result = Consumed
+                }
+            }
+            if (result is Consumed) {
                 return@forEach
             }
         }
